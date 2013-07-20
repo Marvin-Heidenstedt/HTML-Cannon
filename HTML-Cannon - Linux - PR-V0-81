@@ -1,0 +1,427 @@
+//HTML-Cannon - Linux - PreRelaise- V0.81
+//by Marvin Heidenstedt
+
+#include <iostream>
+#include <iterator>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <climits>
+#include <ctime>
+
+using namespace std;
+
+//Globalestrings
+
+string domain = "http://www.heidenstedt.org/"; //Die Domain
+
+string output = "/home/marvin/Arbeitsfläche/heidenstedttest/ausgabe/"; //Die Adresse des Zieles
+
+string topeingabepfad = "/home/marvin/Arbeitsfläche/heidenstedttest/" ; // Der Ordner in dem die eingabe Dateien stehen
+
+string befehlneuerordner = "mkdir "; //Der Terminalbefehl der einen neuen Ordner erstellt !! Lerzeichen nicht vergessen nach dem Befehl !!
+
+int aadh =15; //Artikel auf der Hauptseite
+
+
+//-Globalestrings
+
+
+
+void willkommensnachricht(void){
+
+  cout << "\n\n\nWillkommen bei der HTML-Cannon, deine Anfrage wird jetzt bearbeitet >";
+
+}
+
+void pc(void){ //3 Punkte zum anzeigen das Prog etwas macht
+
+	cout << "...";
+
+}
+
+void ordnererzeugen(void){ //Erstellt eine Ordnerstruktutr - Jahr - Monat - Tag
+
+	time_t now = time(0); //deklaration der zeit O.O
+	tm *ltm = localtime(&now);
+
+	//Ordner (monat)
+	ostringstream ojahr;
+	ojahr << befehlneuerordner;
+	ojahr << output;
+ 	ojahr <<  1900 + ltm->tm_year ;
+ 	ojahr << "/";
+
+	pc();
+
+ 	string jahrout(ojahr.str());
+  	const char * temp = jahrout.c_str();
+
+ 	system(temp);
+
+ 	//Ordner (monat)
+ 	ostringstream ojahr2;
+	ojahr2 << befehlneuerordner;
+	ojahr2 << output;
+ 	ojahr2 <<  1900 + ltm->tm_year ;
+ 	ojahr2 << "/";
+ 	ojahr2 << 1 + ltm->tm_mon ;
+ 	ojahr2 << "/";
+
+	pc();
+
+ 	string jahrout2(ojahr2.str());
+ 	const char * temp2 = jahrout2.c_str();
+
+ 	system(temp2);
+
+
+	//Ordner (tag)
+
+
+ 	ostringstream aosd;
+ 	aosd << befehlneuerordner;
+ 	aosd << output;
+ 	aosd <<  1900 + ltm->tm_year ;
+ 	aosd << "/";
+ 	aosd << 1 + ltm->tm_mon ;
+ 	aosd << "/";
+ 	aosd <<ltm->tm_mday;
+ 	aosd << "/";
+
+	pc();
+
+ 	string bllaaa(aosd.str());
+ 	const char * temp3 = bllaaa.c_str();
+
+ 	system(temp3);
+
+}
+
+void dataprocesses(void){ //Verschiedenste Befehle … eigentlich das Ganze Programm - hier kann man einzelne Daten austauschen
+
+	//---Style---
+	string homeheaderP = (topeingabepfad + "style/homeheader"); //Der Header der Homeseite
+	string homepostfooderP = (topeingabepfad + "style/homepostfooder"); // Der Code ganz unten auf der Seite
+	string homezwischenpostP = (topeingabepfad + "style/homezwischenpost"); // Der Code zwischen jedem Post
+	string hauptheaderpostP = (topeingabepfad +"style/hauptheaderpost"); // Der Header auf jeder Haupseite eines Posts
+	string hauptfoodpostP = (topeingabepfad +"style/hauptfoodpost"); // Der Fooder auf jeder Haupseite eines Posts
+	string kommentarseiteP = (topeingabepfad +"style/kommentarseite"); // Der Code der auf der Kommentarseite angezeigt werden soll
+
+	pc();
+	//---Eingabe---
+	string titelpostP = (topeingabepfad +"eingabe/titelpost"); // Der Titel
+	string homepostP = (topeingabepfad +"eingabe/homepost"); // Der Code der auf der Homeseite angezeigt wird
+	string mainpostP = (topeingabepfad +"eingabe/mainpost"); // Der Code der auf der Hauptseite des Post angezeigt wird
+	string rsspostP = (topeingabepfad +"eingabe/rsspost"); // Der Text als Text und nicht als Code derin der RSS Überschrift angezeigt wird
+
+	pc();
+	//---Daten die aus dem Ausgabeordner importiert werden---
+	string archivseiteP = (output + "archiv.html"); //Die Archivseite … also Archiv ^^
+	string sitemapP = (output + "sitemap.xml"); //Die Sitemap
+
+	pc();
+
+	//--Systemrelewand--
+	string counterP = (topeingabepfad + "/sys/counter"); //Gibt die Zahl des nechsten Posts an
+	string rssarchivepostP = (topeingabepfad + "sys/rsspost/");
+	string titelausgabetopP = (topeingabepfad + "sys/titelpost");
+	string indexausgabeP = (topeingabepfad + "sys/hometext/");
+	//Ausgabe
+	string rssxmlP = (output + "rss.xml");//Der pfad zur rss.xml
+
+
+
+	pc();
+
+	//Einlesen der Dateien
+	istream_iterator<char> end_of_file;
+
+	//--Style--
+	ifstream homeheaderfile(homeheaderP);
+	string homeheader (istream_iterator<char>(homeheaderfile>>noskipws), end_of_file) ; //Text dem String übergeben
+
+	ifstream homepostfooderfile(homepostfooderP);
+	string homepostfooder (istream_iterator<char>(homepostfooderfile>>noskipws), end_of_file) ;
+
+	ifstream homezwischenpostfile(homezwischenpostP);
+	string homezwischenpost (istream_iterator<char>(homezwischenpostfile>>noskipws), end_of_file) ;
+
+	ifstream hauptheaderpostfile(hauptheaderpostP);
+	string hauptheaderpost (istream_iterator<char>(hauptheaderpostfile>>noskipws), end_of_file) ;
+
+	ifstream hauptfoodpostfile(hauptfoodpostP);
+	string hauptfoodpost (istream_iterator<char>(hauptfoodpostfile>>noskipws), end_of_file) ;
+
+	ifstream kommentarseitefile(kommentarseiteP);
+	string kommentarseite (istream_iterator<char>(kommentarseitefile>>noskipws), end_of_file) ;
+
+	pc();
+	//--Eingabe--
+
+	ifstream titelpostfile(titelpostP);
+	string titelpost (istream_iterator<char>(titelpostfile>>noskipws), end_of_file) ;
+
+	ifstream homepostfile(homepostP);
+	string homepost (istream_iterator<char>(homepostfile>>noskipws), end_of_file) ;
+
+	ifstream mainpostfile(mainpostP);
+	string mainpost (istream_iterator<char>(mainpostfile>>noskipws), end_of_file) ;
+
+	ifstream rsspostfile(rsspostP);
+	string rsspost (istream_iterator<char>(rsspostfile>>noskipws), end_of_file) ;
+
+	//---Daten die aus dem Ausgabeordner importiert werden---
+	ifstream archivseitefile(archivseiteP);
+	string archivseite (istream_iterator<char>(archivseitefile>>noskipws), end_of_file) ;
+
+	fstream sitemapfile(sitemapP);
+	string sitemap (istream_iterator<char>(sitemapfile>>noskipws), end_of_file) ;
+
+	//--Systemrelewand--
+
+	ifstream counterfile(counterP);
+	string counter (istream_iterator<char>(counterfile), end_of_file) ; //hier kein noskip da sonst Zeilenumbruch in Datei
+
+	ifstream counter1(counterP);
+	unsigned long counterZahl;
+	counter1 >> counterZahl;
+
+
+
+
+
+
+	time_t now = time(0); //deklaration der zeit O.O
+	tm *ltm = localtime(&now);
+
+	// shortvariable /Jahr/monat/tag/
+	ostringstream datumpathTMP;
+
+	datumpathTMP << 1900 + ltm->tm_year ; //Jahr
+	datumpathTMP << "/" ;
+	datumpathTMP << 1 + ltm->tm_mon ; //Monat
+	datumpathTMP << "/" ;
+	datumpathTMP << ltm->tm_mday ; //Tag
+
+	//umwandeln in String
+	string datumpath(datumpathTMP.str());
+
+
+	//Marker in den Texten suchen
+
+	size_t insert_atarchiv = archivseite.find("<!-- #AM -->"); //Den Marker im Archiv finden
+	size_t insert_atsitemap = sitemap.find("<!-- #SPM -->"); //Den Marker in der Sitemap finden
+	size_t insert_at = homeheader.find("<!-- #BPU -->"); //Der Marker im Header der Hauptseite
+	size_t insert_atkommentar = kommentarseite.find("<!-- #KM -->"); //Der Marker im Header der Hauptseite
+
+	//----- Den Link zur aktuellen Artikelhauptseite------
+	string hauptseitepath;
+	hauptseitepath += domain;
+	hauptseitepath += datumpath;
+	hauptseitepath += "/bp";
+	hauptseitepath += counter + ".html";
+	hauptseitepath += ".html";
+	//einfügen dieses Linkes in datei
+	fstream linkstream;
+	string linkstreampath = (topeingabepfad+"sys/linkpath/"+"link"+counter);
+	linkstream.open(linkstreampath,ios::out);
+	linkstream << hauptseitepath;
+	linkstream.close();
+
+
+
+	//RSS in die richtige Datei schieben
+	string rsspfad;
+	rsspfad = (rssarchivepostP+"rsspostinhalt"+counter) ;
+
+	fstream rssausgabe;
+	rssausgabe.open(rsspfad, ios::out);
+	rssausgabe << rsspost;
+	rssausgabe.close();
+
+	//index post abspeichern
+	string indexpfad;
+	indexpfad = (indexausgabeP+"smaltestINDEX"+counter) ;
+
+	fstream indextextausgabe;
+	indextextausgabe.open(indexpfad, ios::out);
+	indextextausgabe << homepost;
+	indextextausgabe.close();
+
+
+	//hauptseite ausgeben
+
+	//Sozial media vorbereiten
+	string sozialmediahaupt;
+	sozialmediahaupt = ("<h3><hr><a href=\"http://www.heidenstedt.org/kommentar/" + counter + ".html\">Kommentare</a></h3> <br><hr><br> Teile diesen Post: <a href=\"https://twitter.com/intent/tweet?source=webclient&text=Da guck das an :) -> "+ hauptseitepath +"\">Twitter</a>  <a href=\"https://plusone.google.com/_/+1/confirm?hl=de&url="+hauptseitepath+"\">Google +</a>  <a href=\"https://www.facebook.com/sharer/sharer.php?u="+hauptseitepath+"\">Facebook</a> <br><br> <a href=\"http://www.heidenstedt.org/Impressum.html\">Impressum</a> ") ;
+
+	//Dateiausgabe
+	string hauptseitepostP = topeingabepfad+"ausgabe/";
+	hauptseitepostP += datumpath + "/";
+	hauptseitepostP += "bp" + counter +".html";
+
+	fstream hauptseiteout;
+	hauptseiteout.open(hauptseitepostP , ios::out);
+
+	hauptseiteout << hauptheaderpost ;
+	hauptseiteout << homepost;
+	hauptseiteout << hauptfoodpost ;
+	hauptseiteout << sozialmediahaupt;
+
+
+	//archiv weiter führen
+
+	ostringstream datumpathTMP2;
+
+	datumpathTMP2 << ltm->tm_mday ; //Tag
+	datumpathTMP2 << "." ;
+	datumpathTMP2 << 1 + ltm->tm_mon ; //Monat
+	datumpathTMP2 << "." ;
+	datumpathTMP2 << 1900 + ltm->tm_year ; //Jahr+
+
+
+	//kommentar seite einfügen
+	string kommentariframe = ( "\n<iframe src=\"" + hauptseitepath + "\" frameborder=\"1\" width=\"100%\" height=\"420\"  ><p>Ihr Browser kann leider keine eingebetteten Frames anzeigen, bitte benutze einen Browser mit HTML5 und WebM unterstuezung</p></iframe>");
+
+	kommentarseite.insert(insert_atkommentar +14, kommentariframe);
+
+	string kommentarP = (topeingabepfad+ "ausgabe/kommentar/" + counter + ".html" );
+	fstream kommentarstream;
+	kommentarstream.open(kommentarP, ios::out);
+	kommentarstream << kommentarseite ;
+
+cout << kommentarP << "saSdasdasdasd" ;
+
+	//umwandeln in String
+	string datumpath2(datumpathTMP2.str());
+
+	string archiveouttmp;
+	fstream archivstream;
+	archivstream.open(archivseiteP, ios::out);
+	archiveouttmp = ( "\n\n<a href=\"" + hauptseitepath + "\">Post Nr." + counter + " von dem " + datumpath2 + "</a> - " + titelpost + "<br>" );
+
+	archivseite.insert(insert_atarchiv +14, archiveouttmp);
+
+	archivstream << archivseite;
+
+
+
+
+	//Titel wird in die Datei verschoben
+	string titelausgabeP;
+	titelausgabeP = (titelausgabetopP+"/titel");
+	titelausgabeP += counter;
+
+	fstream titelausgabe;
+	titelausgabe.open(titelausgabeP, ios::out);
+	titelausgabe << rsspost;
+	titelausgabe.close();
+
+
+	//Sitemap weiterführen
+	string sitemapeinfuegentext;
+	sitemapeinfuegentext = ("\n\n<url>\n<loc>"+hauptseitepath+"</loc>\n</url>");
+
+	sitemap.insert(insert_atsitemap +15 , sitemapeinfuegentext);//Marker wird oben definiert
+
+	fstream sitemapausgabe;
+	sitemapausgabe.open(sitemapP, ios::out);
+	sitemapausgabe << sitemap;
+	sitemapausgabe.close();
+
+
+
+	//Die RSS-XML generieren - mit der while
+
+	unsigned long zaehler;
+
+	string rssOSS;
+
+	zaehler = counterZahl;
+	zaehler = (zaehler - (aadh+1));
+
+	//Deklarieren der Dateistreams
+
+	fstream rssxmlausgabe;
+	rssxmlausgabe.open(rssxmlP);
+
+	string rsstmp;
+	ostringstream zaeleralsstringOSS;
+
+
+	rssOSS = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\">\n\n<channel>\n<title>Marvin Heidenstedt</title>\n<link>"+domain+"</link>\n<description>Ein Blog von Marvin Heidenstedt</description>\n<language>de</language>\n\n\n";
+
+
+	while(zaehler < counterZahl){
+		zaehler++;
+		zaeleralsstringOSS.str("0");
+		zaeleralsstringOSS << zaehler;
+		string zaeleralsstring(zaeleralsstringOSS.str());
+
+		string rsstmptitelP = (rssarchivepostP + "rsspostinhalt" + zaeleralsstring );
+		ifstream rsstmptitelD(rsstmptitelP);
+		string rsstmptitel (istream_iterator<char>(rsstmptitelD>>noskipws), end_of_file) ;
+
+		string linkpathtmp = (topeingabepfad+"sys/linkpath/"+"link"+zaeleralsstring);
+
+		ifstream linktmpD(linkpathtmp);
+		string linktmp (istream_iterator<char>(linktmpD>>noskipws), end_of_file) ;
+
+		rsstmp += "<item>\n<title>";
+		rsstmp += rsstmptitel;
+		rsstmp += "</title>\n<link>";
+		rsstmp += linktmp;
+		rsstmp += "</link>\n<guid>";
+		rsstmp += linktmp;
+		rsstmp += "</guid>\n</item>\n\n";
+
+
+
+
+		cout << "\nPost Nr.>" << zaehler << " wurde der Homesite beigefügt."<<rsstmptitel;
+	}
+
+	//Einfügen der Strings aus der While in Daten
+
+	string  rsstmp2;
+	rsstmp2 = rssOSS;
+	rsstmp2 += rsstmp;
+	rsstmp2 += "\n\n</channel>\n</rss>";
+
+	fstream rssxmlausgabe2;
+	rssxmlausgabe2.open(rssxmlP);
+	rssxmlausgabe2 << rsstmp2;
+	rssxmlausgabe2.close();
+
+
+
+
+
+
+
+
+	fstream counterauf;
+	counterauf.open(counterP, ios::out);
+
+	unsigned long tmpcounter = ( counterZahl  + 1 );
+
+	counterauf << tmpcounter;
+
+cout << endl << "Es wurden " << aadh << " Post's ausgegeben." << endl <<"Der jetztige Post trägt die Nr. " << counter << endl;
+}
+
+
+int main(){
+
+	willkommensnachricht();
+	pc();
+	ordnererzeugen();
+	pc();
+	dataprocesses();
+
+
+
+	return 0;
+
+}
